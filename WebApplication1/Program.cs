@@ -1,13 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-using StarterAPI.Presistence;
-using StarterAPI.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=./students.db"));
-
-builder.Services.AddTransient<IApplicationDbContext>
-    (provider => provider.GetRequiredService<ApplicationDbContext>());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -30,5 +23,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
