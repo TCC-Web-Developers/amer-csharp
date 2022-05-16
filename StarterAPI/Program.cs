@@ -3,6 +3,8 @@ using StarterAPI.Presistence;
 using StarterAPI.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddTransient<IStudentService, IStudentService>();
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=./students.db"));
 
