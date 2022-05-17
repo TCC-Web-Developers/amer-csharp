@@ -13,7 +13,6 @@ namespace StarterAPI.Presistence
         { }
 
         public DbSet<Student> Students => Set<Student>();
-
-        //DbSet<Student> IApplicationDbContext.Students { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public DbSet<Class> Classes => Set<Class>();
     }
 }

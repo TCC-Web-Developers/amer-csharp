@@ -12,52 +12,83 @@ namespace StarterAPI.Services
             _context = context;
         }
 
-        public IEnumerable<Student> GetStudents()
+        public IEnumerable<Student> Get()
         {
             return _context.Students.ToList();
         }
 
-        public async Task<Student> GetStudent(int studentId)
+        public async Task<Student> Get(int studentId)
         {
             var student = await _context.Students.FindAsync(new object[] { studentId });
+            if (student == null)
+            {
+                throw new KeyNotFoundException("Student not found");
+            }
             return student;
         }
 
-        public async Task<Student> CreateStudent(Student param, CancellationToken ct)
+        public async Task<Student> CreateStudent(Student request, CancellationToken ct)
         {
             var newStudent = new Student
             {
-                FirstName = param.FirstName,
-                LastName = param.LastName,
-                EmailAddress = param.EmailAddress,
-                BirthDate = param.BirthDate,
-                DateEnrolled = param.DateEnrolled,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                EmailAddress = request.EmailAddress,
+                BirthDate = request.BirthDate,
+                DateEnrolled = request.DateEnrolled,
+                Address = request.Address,
+                CourseName = request.CourseName,
+                ContactNo = request.ContactNo,
+                Profile = request.Profile,
             };
+
             _context.Students.Add(newStudent);
             await _context.SaveChangesAsync(ct);
-            string generatedStudentNo = Convert.ToDateTime(param.DateEnrolled).ToString("yyyyMM") + "-" + newStudent.StudentId;
+
+            string generatedStudentNo =
+                Convert.ToDateTime(request.DateEnrolled).ToString("yyyyMM") + "-" + newStudent.StudentId;
+
             newStudent.StudentNo = generatedStudentNo;
+
             await _context.SaveChangesAsync(ct);
             return newStudent;
         }
 
-        
-
-        
-
-        public Task<bool> RemoveStudent(int studentId, CancellationToken ct)
+        public async Task<Student> UpdateStudent(Student request, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var student = await _context.Students.FindAsync(new object[] { request.StudentId });
+
+            if (student == null)
+            {
+                throw new KeyNotFoundException("Student not found");
+            }
+
+            student.FirstName = request.FirstName;
+            student.LastName = request.LastName;
+            student.EmailAddress = request.EmailAddress;
+            student.BirthDate = request.BirthDate;
+            student.DateEnrolled = request.DateEnrolled;
+            student.Address = request.Address;
+            student.CourseName = request.CourseName;
+            student.ContactNo = request.ContactNo;
+            student.Profile = request.Profile;
+
+            await _context.SaveChangesAsync(ct);
+            return student;
         }
 
-        public Task<Student> UpdateStudent(Student param, CancellationToken ct)
+        public async Task<bool> DeleteStudent(int studentId, CancellationToken ct)
         {
-            throw new NotImplementedException();
-        }
+            var student = await _context.Students.FindAsync(new object[] { studentId });
 
-        Task<IEnumerable<Student>> IStudentService.GetStudents()
-        {
-            throw new NotImplementedException();
+            if (student == null)
+            {
+                throw new KeyNotFoundException("Student not found");
+            }
+
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync(ct);
+            return true;
         }
     }
 }

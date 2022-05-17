@@ -4,11 +4,11 @@ namespace StarterAPI.Interfaces
 {
     public interface IStudentService
     {
-        Task<IEnumerable<Student>> GetStudents();
-        Task<Student> GetStudent(int studentId);
+        IEnumerable<Student> Get();
+        Task<Student> Get(int studentId);
 
-        Task<Student> CreateStudent(Student param, CancellationToken ct);
-        Task<Student> UpdateStudent(Student param, CancellationToken ct);
-        Task<bool> RemoveStudent(int studentId, CancellationToken ct);
+        Task<Student> CreateStudent(Student request, CancellationToken ct);
+        Task<Student> UpdateStudent(Student request, CancellationToken ct);
+        Task<bool> DeleteStudent(int studentId, CancellationToken ct);
     }
 }
